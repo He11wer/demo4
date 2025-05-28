@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/userhome}">Главная</a>
+        <a class="nav-button" id="sell-btn" th:href="@{/user/sell}" style="color: white; margin-left: 10px; display: none;">Продать</a>
+    </nav>
+    <div class="auth">
+        <div>
+            <a th:text="Профиль" class="auth-button" id="login-btn"></a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="auth-button" id="register-btn">Выйти</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- Личный кабинет -->
+<div class="profile-container">
+    <aside class="profile-sidebar">
+        <div class="profile-info">
+            <img src="/images/default-avatar.png" alt="Аватар" id="profile-avatar">
+            <h2 id="profile-name" th:text="${user.username}"></h2>
+            <p id="profile-email" th:text="${user.email}"></p>
+            <p class="balance" th:text="'Баланс: ' + ${user.balance} + ' кредитов'"></p>
+        </div>
+        <nav class="profile-nav">
+            <button class="profile-nav-btn active" data-section="profile">Профиль</button>
+            <button class="profile-nav-btn" data-section="messages" onclick="location.href='/admin/users'">Управление пользователями</button>
+            <button class="profile-nav-btn" data-section="messages" onclick="location.href='/admin/messages'">Сообщения</button>
+        </nav>
+    </aside>
+</div>
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

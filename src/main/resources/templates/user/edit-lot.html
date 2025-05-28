@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать лот</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/user/userhome}">Главная</a>
+        <a class="auth-button" id="sell-btn" th:href="@{/user/sell}">Продать</a>
+    </nav>
+    <div class="auth">
+        <a th:text="Профиль" class="auth-button" id="login-btn" th:href="@{/user/profile}"></a>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="auth-button" id="register-btn">Выйти</button>
+        </form>
+    </div>
+</header>
+
+<div class="main-content">
+    <div class="form-container">
+        <h2>Редактировать лот</h2>
+
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <form th:action="@{'/user/lot/' + ${lotId} + '/edit'}" method="post" enctype="multipart/form-data" th:object="${auctionLot}">
+            <div class="form-group">
+                <label for="name">Название</label>
+                <input type="text" id="name" th:field="*{name}" required>
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea id="description" th:field="*{description}" required></textarea>
+                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="startPrice">Начальная цена</label>
+                <input type="number" id="startPrice" th:field="*{startPrice}" step="0.01" min="0" required>
+                <div th:if="${#fields.hasErrors('startPrice')}" th:errors="*{startPrice}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="minBet">Минимальная ставка</label>
+                <input type="number" id="minBet" th:field="*{minBet}" step="0.01" min="0" required>
+                <div th:if="${#fields.hasErrors('minBet')}" th:errors="*{minBet}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="startTime">Дата начала</label>
+                <input type="datetime-local" id="startTime" th:field="*{startTime}" required>
+                <div th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="endTime">Дата окончания</label>
+                <input type="datetime-local" id="endTime" th:field="*{endTime}" required>
+                <div th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="categories">Категории (выберите несколько, удерживая Ctrl)</label>
+                <select id="categories" name="categories" multiple class="form-control" th:field="*{categories}">
+                    <option value="Электроника">Электроника</option>
+                    <option value="Одежда">Одежда</option>
+                    <option value="Мебель">Мебель</option>
+                    <option value="Книги">Книги</option>
+                    <option value="Спорт">Спорт</option>
+                </select>
+                <div th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Изображение (оставьте пустым, чтобы не изменять)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="error"></div>
+            </div>
+
+            <button type="submit" class="submit-button">Сохранить изменения</button>
+            <a th:href="@{'/user/lot/' + ${lotId}}" class="cancel-button">Отмена</a>
+        </form>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+    </div>
+</div>
+</body>
+</html>

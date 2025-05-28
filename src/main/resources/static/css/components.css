@@ -1,0 +1,459 @@
+
+/* Попапы */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.popup h2 {
+    margin-bottom: 20px;
+    color: #4a90e2;
+    text-align: center;
+}
+
+.popup input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+.popup button {
+    width: 100%;
+    padding: 12px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.popup button:hover {
+    background: #3a7bc8;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+/* Стили для корзины в попапе */
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cart-item:hover {
+    background-color: #f9f9f9;
+}
+
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 4px;
+}
+
+.cart-item-info {
+    flex-grow: 1;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.remove-from-cart {
+    color: #e74c3c;
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 5px;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.remove-from-cart:hover {
+    color: #c0392b;
+}
+
+.cart-total {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Кнопка выхода */
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav, .auth {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .product-page {
+        flex-direction: column;
+    }
+
+    .profile-container {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .products {
+        grid-template-columns: 1fr;
+    }
+
+    .user-products {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Добавьте эти стили в конец файла styles.css */
+
+/* Стили для переписок */
+.messages-container {
+    display: flex;
+    height: 500px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.contacts-list {
+    width: 300px;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.contact {
+    display: flex;
+    padding: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.contact:hover {
+    background-color: #f5f7fa;
+}
+
+.contact img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.contact-info {
+    flex-grow: 1;
+}
+
+.contact-info h4 {
+    margin: 0 0 5px 0;
+}
+
+.contact-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.unread-count {
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+}
+
+.chat-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.chat-header h3 {
+    margin: 0;
+}
+
+.messages-list {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 18px;
+    position: relative;
+}
+
+.message.sent {
+    background-color: #4a90e2;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 0;
+}
+
+.message.received {
+    background-color: #f0f0f0;
+    margin-right: auto;
+    border-bottom-left-radius: 0;
+}
+
+.message-time {
+    font-size: 12px;
+    opacity: 0.7;
+    display: block;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.message-input {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+}
+
+.message-input input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.message-input button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.message-input button:hover {
+    background-color: #3a7bc8;
+}
+
+/* Стили для списка друзей */
+.friends-list {
+    margin-bottom: 30px;
+}
+
+.friend {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.friend img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.friend-info {
+    flex-grow: 1;
+}
+
+.friend-info h4 {
+    margin: 0 0 5px 0;
+}
+
+.friend-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.remove-friend, .message-friend {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+}
+
+.remove-friend {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.remove-friend:hover {
+    background-color: #c0392b;
+}
+
+.message-friend {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.message-friend:hover {
+    background-color: #3a7bc8;
+}
+
+.add-friend {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.add-friend h3 {
+    margin-top: 0;
+}
+
+.add-friend input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-friend button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-friend button:hover {
+    background-color: #3a7bc8;
+}
+/* Стили для вкладок товаров */
+.user-products-container {
+    margin-top: 20px;
+}
+
+.user-products-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.products-tab {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.products-tab.active {
+    border-bottom: 2px solid #4a90e2;
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+.products-tab:hover {
+    background-color: #f5f7fa;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АукционPro - Лот</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .rating-stars {
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            text-align: center;
+        }
+        .rating-stars input[type="radio"] {
+            display: none;
+        }
+        .rating-stars label {
+            color: #ddd;
+            font-size: 2em;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/user/userhome}">Главная</a>
+        <a class="auth-button" id="sell-btn" th:href="@{/user/sell}">Продать</a>
+    </nav>
+    <div class="auth">
+        <a th:text="Профиль" class="auth-button" id="login-btn" th:href="@{/user/profile}"></a>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="auth-button" id="register-btn">Выйти</button>
+        </form>
+    </div>
+</header>
+
+<div class="main-content">
+    <div class="product-detail-container">
+        <div class="product-detail">
+            <img th:src="${lot.imageUrl}" alt="Изображение лота" class="product-image">
+            <div class="product-detail-info">
+                <h2 th:text="${lot.name}"></h2>
+                <p class="product-detail-description" th:text="${lot.description}"></p>
+                <p class="product-detail-price" th:text="'Текущая цена: ' + ${lot.lastBet != null ? lot.lastBet : lot.startPrice} + ' кредитов'"></p>
+                <p class="product-detail-end" th:text="'Аукцион начинается: ' + ${#temporals.format(lot.startTime, 'dd.MM.yyyy HH:mm')}"></p>
+                <p class="product-detail-end" th:text="'Аукцион заканчивается: ' + ${#temporals.format(lot.endTime, 'dd.MM.yyyy HH:mm')}"></p>
+                <p th:if="${lot.averageRating != null}" class="product-rating">
+                    Рейтинг: <span th:text="${#numbers.formatDecimal(lot.averageRating, 1, 1)}"></span> / 5.0
+                </p>
+
+                <div class="tracking-actions" th:unless="${lotTracking?.liked == true}" >
+                    <form id="trackForm" th:action="@{'/user/lot/' + ${lot.id} + '/track'}" method="post">
+                        <input type="hidden" name="subscribe" value="false">
+                        <input type="hidden" id="isTracked" th:value="${lotTracking?.liked}">
+                        <button type="submit" class="track-button">
+                            <span>Отслеживать лот</span>
+                        </button>
+                    </form>
+                </div>
+
+
+                <div th:unless="${isSeller}" class="bid-form" th:classappend="${T(java.time.LocalDateTime).now().isBefore(lot.startTime) or T(java.time.LocalDateTime).now().isAfter(lot.endTime)} ? 'disabled' : ''">
+                    <p class="balance-info" th:text="'Ваш баланс: ' + ${user.balance} + ' кредитов'"></p>
+                    <form th:action="@{'/user/lot/' + ${lot.id} + '/bid'}" method="post">
+                        <input type="number" name="bidAmount" th:value="${bidAmount}" step="0.01" min="0" required>
+                        <button type="submit" class="bid-button">Сделать ставку</button>
+                    </form>
+                    <div th:if="${T(java.time.LocalDateTime).now().isBefore(lot.startTime)}" class="bid-message">
+                        Аукцион начнется в <span th:text="${#temporals.format(lot.startTime, 'dd.MM.yyyy HH:mm')}"></span>
+                    </div>
+                    <div th:if="${T(java.time.LocalDateTime).now().isAfter(lot.endTime)}" class="bid-message">
+                        Аукцион завершен
+                    </div>
+                </div>
+
+                <div th:if="${isSeller}" class="seller-actions">
+                    <a th:href="@{'/user/lot/' + ${lot.id} + '/edit'}" class="edit-button">Редактировать лот</a>
+                    <form th:action="@{'/user/lot/' + ${lot.id} + '/delete'}" method="post">
+                        <button type="submit" class="delete-button">Удалить лот</button>
+                    </form>
+                </div>
+
+                <div th:if="${param.success}" class="alert alert-success">
+                    Ставка успешно размещена!
+                </div>
+                <div th:if="${param.error}" class="alert alert-error">
+                    Ошибка: <span th:text="${param.error[0]}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Чат -->
+        <input type="hidden" name="currentUserId" th:value="${currentUserId}">
+        <input type="hidden" id="lotId" th:value="${lot.id}">
+
+        <div class="chat-container" id="chat">
+            <h3>Обсуждение лота</h3>
+            <div class="chat-messages" id="chatMessages">
+                <div th:each="message : ${chatMessages}" class="chat-message">
+                    <strong th:text="${message.user.username}"></strong>:
+                    <span th:text="${message.message}"></span>
+                    <small th:text="${#temporals.format(message.createdAt, 'dd.MM.yyyy HH:mm')}"></small>
+                </div>
+            </div>
+            <form th:action="@{'/user/lot/' + ${lot.id} + '/chat'}" method="post" class="chat-form" id="chatForm">
+                <input type="text" name="message" placeholder="Ваше сообщение..." required>
+                <button type="submit" class="chat-button">Отправить</button>
+            </form>
+        </div>
+
+        <!-- Добавьте этот блок после блока чата (перед закрывающим </div>) -->
+        <div class="reviews-container">
+            <h3>Отзывы об аукционе</h3>
+            <div th:if="${ratings_empty}" class="empty-reviews">
+                Пока нет отзывов об этом аукционе
+            </div>
+            <div class="reviews-list">
+                <div th:each="rating : ${ratings}" class="review-item">
+                    <div class="review-header">
+                        <span class="review-author" th:text="${rating.user.username}"></span>
+                        <div class="review-stars">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                        <i th:class="${i <= rating.rating} ? 'fas fa-star' : 'far fa-star'"></i>
+                    </span>
+                        </div>
+                        <span class="review-date" th:text="${#temporals.format(rating.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="review-comment" th:text="${rating.comment}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок рейтинга -->
+        <div class="rating-form" th:if="${userRating == null and not isSeller}">
+            <form id="ratingForm" th:action="@{'/user/lot/' + ${lot.id} + '/rate'}" method="post">
+                <div class="rating-stars">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1"><i class="fas fa-star"></i></label>
+                </div>
+                <textarea name="comment" placeholder="Ваш отзыв..."></textarea>
+                <button type="submit" class="rate-button">Оценить</button>
+            </form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+        <script th:src="@{/js/chat.js}"></script>
+
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!-- tracking.html -->
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АукционPro - Отслеживаемые лоты</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/user/userhome}">Главная</a>
+        <a class="auth-button" id="sell-btn" th:href="@{/user/sell}">Продать</a>
+    </nav>
+    <div class="auth">
+        <a th:text="Профиль" class="auth-button" id="login-btn" th:href="@{/user/profile}"></a>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="auth-button" id="register-btn">Выйти</button>
+        </form>
+    </div>
+</header>
+
+<div class="main-content">
+    <div class="tracking-container">
+        <h1>Отслеживаемые лоты</h1>
+
+        <div th:if="${trackedLots.empty}" class="empty-message">
+            У вас нет отслеживаемых лотов
+        </div>
+
+        <div class="tracked-lots">
+            <div class="tracked-lot" th:each="tracking : ${trackedLots}">
+                <a th:href="@{'/user/lot/' + ${tracking.lot.id}}">
+                    <img th:src="${tracking.lot.imageUrl}" alt="Изображение лота">
+                    <h3 th:text="${tracking.lot.name}"></h3>
+                    <p th:text="'Текущая цена: ' + ${tracking.lot.lastBet != null ? tracking.lot.lastBet : tracking.lot.startPrice} + ' кредитов'"></p>
+                    <p th:text="'Заканчивается: ' + ${#temporals.format(tracking.lot.endTime, 'dd.MM.yyyy HH:mm')}"></p>
+                </a>
+                <div class="tracking-status">
+                    <span th:if="${tracking.subscribed}" class="subscribed">Подписаны на уведомления</span>
+                    <form th:action="@{'/user/lot/' + ${tracking.lot.id} + '/track'}" method="post">
+                        <input type="hidden" name="subscribe" value="false">
+                        <button type="submit" class="remove-button">Удалить из отслеживаемых</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

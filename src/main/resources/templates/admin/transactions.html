@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Transactions</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/tranczation.css}">
+</head>
+<body>
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/admin/userhome}">Главная</a>
+        <a class="auth-button" th:href="@{/admin/users}">Пользователи</a>
+    </nav>
+    <div class="auth">
+        <a th:text="Профиль" class="auth-button" th:href="@{/admin/profile}"></a>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button class="auth-button">Выйти</button>
+        </form>
+    </div>
+</header>
+
+<div class="container">
+    <h1>Транзакции пользователя: <span th:text="${user.username}"></span></h1>
+
+    <h2>Как продавец</h2>
+    <table class="transaction-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Лот</th>
+            <th>Описание</th>
+            <th>Покупатель</th>
+            <th>Цена</th>
+            <th>Дата</th>
+            <th>Статус оплаты</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tx : ${asSeller}">
+            <td th:text="${tx.id}"></td>
+            <td th:text="${tx.lotName}"></td>
+            <td th:text="${tx.lotDescription}"></td>
+            <td th:text="${tx.winner != null} ? ${tx.winner.username} : 'Нет победителя'"></td>
+            <td th:text="${tx.finalPrice}"></td>
+            <td th:text="${tx.transactionTime}"></td>
+            <td th:text="${tx.paymentCompleted} ? 'Оплачено' : 'Не оплачено'"></td>
+        </tr>
+        <tr th:if="${asSeller.empty}">
+            <td colspan="7">Нет транзакций</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Как покупатель</h2>
+    <table class="transaction-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Лот</th>
+            <th>Описание</th>
+            <th>Продавец</th>
+            <th>Цена</th>
+            <th>Дата</th>
+            <th>Статус оплаты</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tx : ${asBuyer}">
+            <td th:text="${tx.id}"></td>
+            <td th:text="${tx.lotName}"></td>
+            <td th:text="${tx.lotDescription}"></td>
+            <td th:text="${tx.seller.username}"></td>
+            <td th:text="${tx.finalPrice}"></td>
+            <td th:text="${tx.transactionTime}"></td>
+            <td th:text="${tx.paymentCompleted} ? 'Оплачено' : 'Не оплачено'"></td>
+        </tr>
+        <tr th:if="${asBuyer.empty}">
+            <td colspan="7">Нет транзакций</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/admin/users}" class="btn">Назад к списку пользователей</a>
+</div>
+</body>
+</html>

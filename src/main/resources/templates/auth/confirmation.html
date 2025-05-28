@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение аккаунта | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="nav-button" th:href="@{/userhome}">Главная</a>
+    </nav>
+    <div class="auth">
+        <a class="auth-button" id="login-btn" th:href="@{/auth/login}">Вход</a>
+        <span id="user-credits" style="color: white; margin-left: 10px; display: none;"></span>
+    </div>
+</header>
+
+<div class="confirmation-container">
+    <div class="confirmation-message">
+        <h2 class="form-group">Подтверждение аккаунта</h2>
+        <p class="form-group">Введите код подтверждения, который был отправлен на вашу почту:</p>
+
+        <!-- Форма для ввода токена -->
+        <form th:action="@{/auth/verify}" method="post">
+            <div class="form-group">
+                <input
+                        type="text"
+                        name="token"
+                        class="form-control"
+                        placeholder="Введите код подтверждения"
+                        required
+                >
+                <small class="text-danger" th:if="${error}" th:text="${error}"></small>
+            </div>
+            <button type="submit" class="submit-button">Подтвердить</button>
+        </form>
+
+        <p class="form-group" style="margin-top: 20px;">Если вы не получили код, проверьте папку "Спам" или
+            <a th:href="@{/auth/resend-token}">запросите новый код</a>.</p>
+    </div>
+</div>
+
+</body>
+</html>

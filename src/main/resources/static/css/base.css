@@ -1,0 +1,516 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Шапка сайта */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background: linear-gradient(135deg, #4a90e2, #3a7bc8);
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-button, .auth-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: background 0.3s;
+}
+
+.nav-button:hover, .auth-button:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.auth {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Основной контент */
+.main-content {
+    display: flex;
+    padding: 25px 5%;
+    flex-grow: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 30px;
+}
+
+/* Боковая панель */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.filters {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.filters h3 {
+    margin: 0 0 15px 0;
+    color: #4a90e2;
+    font-size: 16px;
+}
+
+.filter {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.cart {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.cart:hover {
+    transform: translateY(-2px);
+}
+
+.cart h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#cart-count {
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+/* Контейнер товаров */
+.products-container {
+    flex-grow: 1;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+/* Сетка товаров */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.product h3 {
+    margin: 15px;
+    font-size: 16px;
+}
+
+.product p {
+    margin: 0 15px 15px;
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+/* Стили для страницы товара */
+.product-page {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    gap: 40px;
+}
+
+.product-gallery {
+    flex: 1;
+    max-width: 600px;
+}
+
+.main-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.thumbnails img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border 0.2s;
+}
+
+.thumbnails img:hover {
+    border-color: #4a90e2;
+}
+
+.product-details {
+    flex: 1;
+    max-width: 500px;
+}
+
+.price-section {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.current-price {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.bid-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.auction-info {
+    margin: 25px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.info-item {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-weight: bold;
+    width: 120px;
+    color: #555;
+}
+
+.value {
+    flex: 1;
+}
+
+.bid-info-item {
+    margin-top: 5px;
+}
+
+.bid-info-item .value {
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.product-description {
+    margin: 30px 0;
+    line-height: 1.6;
+}
+
+.bid-section {
+    margin-top: 30px;
+}
+
+.bid-section input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.bid-button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.bid-button:hover {
+    background: #3a7bc8;
+}
+
+.bid-button[disabled] {
+    background-color: #cccccc !important;
+    cursor: not-allowed;
+}
+
+/* Стили для формы добавления товара */
+.sell-form-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.sell-form-container h1 {
+    margin-bottom: 20px;
+    color: #4a90e2;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    max-width: 600px; /* или любая другая ширина */
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.submit-button:hover {
+    background: #3a7bc8;
+}
+
+/* Стили для личного кабинета */
+.profile-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.profile-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.profile-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-nav-btn {
+    padding: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.profile-nav-btn:hover {
+    background: #f0f0f0;
+}
+
+.profile-nav-btn.active {
+    background: #4a90e2;
+    color: white;
+}
+
+.profile-content {
+    flex-grow: 1;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.profile-section {
+    display: none;
+}
+
+.profile-section.active {
+    display: block;
+}
+
+.user-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.user-product {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.user-product:hover {
+    transform: translateY(-3px);
+}
+
+.user-product img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.user-product h3 {
+    margin-bottom: 5px;
+}
+
+.user-product p {
+    color: #4a90e2;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-product, .delete-product {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.edit-product {
+    background: #4a90e2;
+    color: white;
+}
+
+.edit-product:hover {
+    background: #3a7bc8;
+}
+
+.delete-product {
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-product:hover {
+    background: #c0392b;
+}
+
+.messages-list {
+    margin-top: 20px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

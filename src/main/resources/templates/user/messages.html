@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Сообщения | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/userhome}">Главная</a>
+        <a class="auth-button" id="sell-btn" th:href="@{/user/sell}">Продать</a>
+    </nav>
+    <div class="auth">
+        <div>
+            <a th:text="Профиль" class="auth-button" id="login-btn" th:href="@{/user/profile}"></a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="auth-button" id="register-btn">Выйти</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="messages-container">
+    <input type="hidden" id="currentUserId" value="${currentUser.id}" />
+    <aside class="contacts-sidebar">
+        <div class="search-container">
+            <input type="text" id="user-search" placeholder="Поиск пользователей...">
+            <button id="search-btn">Найти</button>
+        </div>
+        <div class="contacts-list">
+            <div th:each="user : ${allUsers}"
+                 th:if="${user.id != currentUser.id}"
+                 class="contact-item"
+                 th:attr="data-userid=${user.id}">
+                <img th:src="@{/images/default-avatar.png}" alt="Аватар" class="contact-avatar">
+                <span class="contact-username" th:text="${user.username}"></span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="chat-container">
+        <div class="chat-header">
+            <h2 id="chat-with-user">Выберите пользователя для чата</h2>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Сообщения будут загружаться здесь -->
+        </div>
+        <div class="chat-input">
+            <textarea id="message-input" placeholder="Введите сообщение..."></textarea>
+            <button id="send-btn">Отправить</button>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/messeges.js}"></script>
+
+</body>
+</html>

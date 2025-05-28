@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель админа</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .test-card {
+            transition: transform 0.2s;
+        }
+        .test-card:hover {
+            transform: translateY(-5px);
+        }
+        .progress {
+            height: 20px;
+        }
+        .collapse-toggle {
+            cursor: pointer;
+        }
+        .collapse-toggle::after {
+            content: '\f282'; /* Иконка chevron-down из Bootstrap Icons */
+            font-family: 'bootstrap-icons';
+            float: right;
+            transition: transform 0.3s;
+        }
+        .collapse-toggle.collapsed::after {
+            content: '\f285'; /* Иконка chevron-right из Bootstrap Icons */
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Панель администратора</h1>
+        <div>
+            <span th:text="'Вы вошли как: ' + ${username}" class="me-3"></span>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Выйти</button>
+            </form>
+        </div>
+        <a th:href="@{/tests/available}" class="btn btn-outline-primary me-2">
+            <i class="bi bi-list-check"></i> Доступные тесты
+        </a>
+    </div>
+
+    <!-- Блок для отображения flash-сообщений -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Блок управления пользователями -->
+    <div class="card user-management-card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Управление пользователями</h5>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/admin/change-role}" method="post" class="mb-3">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-6">
+                        <label for="username" class="form-label">Логин пользователя</label>
+                        <input type="text" id="username" name="username" class="form-control"
+                               placeholder="Введите логин пользователя" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="role" class="form-label">Новая роль</label>
+                        <select id="role" name="role" class="form-select" required>
+                            <option value="ROLE_USER">Пользователь</option>
+                            <option value="ROLE_TESTER">Тестировщик</option>
+                            <option value="ROLE_ADMIN">Администратор</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-arrow-repeat"></i> Изменить
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Блок пройденных тестов с возможностью сворачивания -->
+    <div class="card mb-4">
+        <div class="card-header collapse-toggle" data-bs-toggle="collapse" data-bs-target="#completedTestsCollapse" aria-expanded="true">
+            <h5 class="mb-0 d-inline">Пройденные тесты</h5>
+        </div>
+        <div class="collapse show" id="completedTestsCollapse">
+            <div class="card-body">
+                <div th:if="${not #lists.isEmpty(completedTests)}" class="row">
+                    <div th:each="attempt : ${completedTests}" class="col-md-6 mb-3">
+                        <div class="card test-card h-100">
+                            <div class="card-body">
+                                <h5 th:text="${attempt.test.title}"></h5>
+                                <p class="text-muted" th:text="'Дата прохождения: ' + ${#temporals.format(attempt.endTime, 'dd.MM.yyyy HH:mm')}"></p>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Результат:</span>
+                                    <strong th:text="${attempt.score} + '/' + ${attempt.test.maxScore}"></strong>
+                                </div>
+
+                                <div class="progress mb-3">
+                                    <div class="progress-bar"
+                                         th:classappend="${attempt.score >= attempt.test.maxScore * 0.8} ? 'bg-success' :
+                                                         (${attempt.score >= attempt.test.maxScore * 0.5} ? 'bg-warning' : 'bg-danger')"
+                                         th:style="'width: ' + ${attempt.score * 100 / attempt.test.maxScore} + '%'"
+                                         role="progressbar">
+                                        <span th:text="${#numbers.formatDecimal(attempt.score * 100 / attempt.test.maxScore, 1, 2)} + '%'"></span>
+                                    </div>
+                                </div>
+
+                                <a th:href="@{/tests/{testId}/attempt/{attemptId}/results(testId=${attempt.test.id}, attemptId=${attempt.id})}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(completedTests)}" class="text-center text-muted">
+                    <p>Вы еще не прошли ни одного теста</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная карточка с таблицей тестов -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Мои тесты</h5>
+            <a th:href="@{/tester/tests/new}" class="btn btn-primary">Создать новый тест</a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Статус</th>
+                    <th>Вопросов</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="test : ${tests}">
+                    <td th:text="${test.title}"></td>
+                    <td>
+                        <span th:if="${test.active}" class="badge bg-success">Активен</span>
+                        <span th:unless="${test.active}" class="badge bg-secondary">Неактивен</span>
+                    </td>
+                    <td th:text="${test.questions.size()}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <a th:href="@{/tester/tests/{id}/questions(id=${test.id})}"
+                               class="btn btn-sm btn-outline-primary">Редактировать</a>
+                            <a th:href="@{/tester/tests/{id}/permissions(id=${test.id})}"
+                               class="btn btn-sm btn-outline-secondary">Доступ</a>
+                            <a th:href="@{/tester/tests/{id}/results(id=${test.id})}"
+                               class="btn btn-sm btn-outline-info">Результаты</a>
+                            <form th:action="@{/tester/tests/{id}/toggle-status(id=${test.id})}"
+                                  method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm"
+                                        th:classappend="${test.active} ? 'btn-outline-warning' : 'btn-outline-success'">
+                                    <span th:text="${test.active} ? 'Деактивировать' : 'Активировать'"></span>
+                                </button>
+                            </form>
+                            <a th:href="@{/tester/tests/{id}/invite(id=${test.id})}"
+                               class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-envelope"></i> Пригласить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Подключаем Bootstrap JS для работы collapse -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

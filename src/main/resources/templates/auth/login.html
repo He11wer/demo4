@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<div class="register-container">
+    <header class="header">
+        <div class="logo">АукционPro</div>
+        <nav class="nav">
+            <a class="auth-button" th:href="@{/userhome}">Главная</a>
+        </nav>
+        <div class="auth">
+            <a class="auth-button" id="login-btn" >Вход</a>
+            <a class="auth-button" id="register-btn" th:href="@{/auth/register}">Регистрация</a>
+        </div>
+    </header>
+    <h1 class="form-group">Вход в систему</h1>
+
+    <div th:if="${param.verifySuccess}" class="alert alert-success">
+        Email успешно подтвержден!
+    </div>
+    <!-- Сообщение об ошибке -->
+    <div th:if="${error}" class="form-group">
+        <span th:text="${error}"></span>
+    </div>
+    <form th:action="@{/auth/login}" method="post" onsubmit="console.log('Отправка пароля:', document.getElementById('password').value)">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="form-group">
+            <label for="username">Логин:</label>
+            <input type="text" id="username" name="username" placeholder="Введите ваш логин" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" placeholder="Введите ваш пароль" required>
+        </div>
+        <button  class="submit-button" id = "submit-btn">Войти</button>
+
+        <div class="form-group">
+            <a th:href="@{/auth/forgot-password}" class="forgot-password">Забыли пароль?</a>
+        </div>
+
+        <div th:if="${param.error}" class="error-message">
+            <span th:if="${#strings.isEmpty(session.SPRING_SECURITY_LAST_EXCEPTION?.message)}">
+                Неверный логин или пароль
+            </span>
+        </div>
+        <div th:if="${param.logout}" class="form-group">
+            Вы успешно вышли из системы
+        </div>
+    </form>
+</div>
+</body>
+</html>

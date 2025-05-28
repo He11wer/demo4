@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+    <!-- Шапка сайта -->
+
+    <header class="header">
+        <div class="logo">АукционPro</div>
+        <nav class="nav">
+            <a class="auth-button" >Главная</a>
+            <a class="nav-button" id="sell-btn" th:href="@{/user/sell}" style="color: white; margin-left: 10px; display: none;">Продать</a>
+        </nav>
+        <div class="auth">
+            <div>
+                <a th:text="Профиль" class="auth-button" id="login-btn" th:href="@{/admin/profile}"></a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button class="auth-button" id="register-btn" >Выйти</button>
+                </form>
+            </div>
+            <span id="user-credits" style="color: white; margin-left: 10px; display: none;"></span>
+        </div>
+    </header>
+    <div th:if="${param.success}" class="alert alert-success">
+        Лот успешно создан и выставлен на аукцион!
+    </div>
+    <!-- Основной контент -->
+    <div class="main-content">
+        <!-- Боковая панель -->
+
+        <aside class="sidebar">
+            <div class="filters">
+                <h3>Сортировка</h3>
+                <select class="filter" id="sort-by">
+                    <option value="date">По дате</option>
+                    <option value="price-asc">По цене (↑)</option>
+                    <option value="price-desc">По цене (↓)</option>
+                </select>
+                <h3>Категории</h3>
+                <select class="filter" id="filter-category">
+                    <option value="all">Все</option>
+                    <option value="electronics">Электроника</option>
+                    <option value="clothes">Одежда</option>
+                    <option value="jewelry">Украшения</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Товары -->
+        <!-- Товары -->
+        <div class="products-container">
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-bar" placeholder="Найти лоты...">
+            </div>
+            <div class="products" id="products-grid">
+                <!-- Отображение лотов из базы данных в 3 столбца -->
+                <div class="product-card" th:each="lot : ${lots}">
+                    <img th:src="${lot.imageUrl}" alt="Изображение лота" class="product-image">
+                    <div class="product-info">
+                        <h3 th:text="${lot.name}"></h3>
+                        <p class="product-description" th:text="${lot.description}"></p>
+                        <p class="product-price" th:text="'Цена: ' + ${lot.startPrice} + ' кредитов'"></p>
+                        <p class="product-end-time" th:text="'Заканчивается: ' + ${#temporals.format(lot.endTime, 'dd.MM.yyyy HH:mm')}"></p>
+                        <a class="bid-button" th:href="@{'/admin/lot/' + ${lot.id}}">Просмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Попап корзины -->
+    <div class="popup" id="cart-popup">
+        <div class="popup-content" style="max-width: 600px;">
+            <span class="close">&times;</span>
+            <h2>Ваша корзина</h2>
+            <div id="cart-items">
+                <!-- Товары будут добавляться здесь -->
+            </div>
+            <div class="cart-total">
+                <h3>Итого: <span id="cart-total-price">0</span> кредитов</h3>
+                <button class="bid-button" id="checkout-btn">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/dash.js}"></script>
+
+</body>
+</html>

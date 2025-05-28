@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аккаунт заблокирован | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+</head>
+<body>
+<div class="register-container">
+    <h1>Ваш аккаунт заблокирован</h1>
+    <p>К сожалению, ваш аккаунт был заблокирован администратором.</p>
+    <p>Если вы считаете, что это произошло по ошибке, пожалуйста, свяжитесь с поддержкой.</p>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="submit-button">Выйти</button>
+    </form>
+</div>
+</body>
+</html>

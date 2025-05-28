@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | АукционPro</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button" th:href="@{/userhome}">Главная</a>
+        <a class="auth-button" id="sell-btn" th:href="@{/user/sell}">Продать</a>
+    </nav>
+    <div class="auth">
+        <div>
+            <a th:text="Профиль" class="auth-button" id="login-btn"></a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="auth-button" id="register-btn">Выйти</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- Личный кабинет -->
+<div class="profile-container">
+    <aside class="profile-sidebar">
+        <div class="profile-info">
+            <img src="/images/default-avatar.png" alt="Аватар" id="profile-avatar">
+            <h2 id="profile-name" th:text="${user.username}"></h2>
+            <p id="profile-email" th:text="${user.email}"></p>
+            <p class="balance" th:text="'Баланс: ' + ${user.balance} + ' кредитов'"></p>
+        </div>
+        <nav class="profile-nav">
+            <button class="profile-nav-btn active" data-section="profile">Профиль</button>
+            <button class="profile-nav-btn" data-section="won-lots">Выигранные лоты</button>
+            <button class="profile-nav-btn" data-section="messages" onclick="location.href='/user/messages'">Сообщения</button>
+        </nav>
+    </aside>
+
+    <main class="profile-content">
+        <!-- Секция профиля -->
+        <section id="profile-section" class="profile-section active">
+            <h2>Редактирование профиля</h2>
+            <form th:action="@{/user/profile/update}" method="post">
+                <div class="form-group">
+                    <label for="username2" id="username1">Имя пользователя:</label>
+                    <input type="text" id="username2" name="username" th:value="${user.username}" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileDescription">Описание профиля:</label>
+                    <textarea id="profileDescription" name="profileDescription" rows="4" th:text="${user.profileDescription}"></textarea>
+                </div>
+                <button type="submit" class="save-btn">Сохранить изменения</button>
+            </form>
+        </section>
+
+        <!-- Секция выигранных лотов -->
+        <section id="won-lots-section" class="profile-section">
+            <h2>Выигранные лоты</h2>
+            <div class="won-lots-list">
+                <div th:each="transaction : ${wonTransactions}" class="won-lot-item">
+                    <h3 th:text="${transaction.lotName}"></h3>
+                    <p th:text="${transaction.lotDescription}"></p>
+                    <p th:text="'Цена: ' + ${transaction.finalPrice} + ' кредитов'"></p>
+                    <p th:text="'Дата: ' + ${#temporals.format(transaction.transactionTime, 'dd.MM.yyyy HH:mm')}"></p>
+                </div>
+                <div th:if="${#lists.isEmpty(wonTransactions)}" class="no-items">
+                    У вас нет выигранных лотов.
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

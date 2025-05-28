@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АукционPro | Вход в систему</title>
+    <link rel="stylesheet" th:href="@{/css/pages.css}">
+    <link rel="stylesheet" th:href="@{/css/utilities.css}">
+</head>
+<body>
+<!-- Шапка сайта -->
+<header class="header">
+    <div class="logo">АукционPro</div>
+    <nav class="nav">
+        <a class="auth-button">Главная</a>
+    </nav>
+    <div class="auth">
+        <a class="auth-button" id="login-btn" th:href="@{/auth/login}">Вход</a>
+        <a class="auth-button" id="register-btn" th:href="@{/auth/register}">Регистрация</a>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="main-content">
+    <div class="auth-message">
+        <h2>Добро пожаловать на АукционPro!</h2>
+        <p>Чтобы получить полный доступ к уникальным лотам, участвовать в аукционах и управлять своими покупками, пожалуйста, авторизуйтесь в системе.</p>
+        <p>Наш аукцион предлагает эксклюзивные товары по выгодным ценам. После входа вы сможете:</p>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3 class="feature-title">Участвовать в торгах</h3>
+                <p class="feature-desc">Делайте ставки на понравившиеся лоты и выигрывайте аукционы</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛍️</div>
+                <h3 class="feature-title">Продавать товары</h3>
+                <p class="feature-desc">Размещайте свои лоты и находите покупателей по лучшей цене</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3 class="feature-title">Получать уведомления</h3>
+                <p class="feature-desc">Будьте в курсе всех важных событий и изменений ставок</p>
+            </div>
+        </div>
+
+        <div class="auth-buttons">
+            <a class="auth-button large" id="login-btn-main" th:href="@{/auth/login}">Войти в аккаунт</a>
+            <a class="auth-button large" id="register-btn-main" th:href="@{/auth/register}">Создать аккаунт</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 АукционPro. Все права защищены.</p>
+</footer>
+</body>
+</html>
