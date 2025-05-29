@@ -15,60 +15,6 @@ import com.selbuy.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/*
-@Service
-public class RegistrationService {
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationService.class);
-
-    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Transactional
-    public void registerUser(RegistrationDto registrationDto) {
-        logger.debug("Начинаем регистрацию пользователя: {}", registrationDto.getUsername());
-
-        try {
-            // 1. Проверка существования пользователя
-            if (userRepository.existsByUsername(registrationDto.getUsername())) {
-                throw new IllegalArgumentException("Имя пользователя уже занято");
-            }
-            if (userRepository.existsByEmail(registrationDto.getEmail())) {
-                throw new IllegalArgumentException("Email уже используется");
-            }
-
-            // 2. Создание нового пользователя
-            User user = new User();
-            user.setUsername(registrationDto.getUsername());
-            user.setEmail(registrationDto.getEmail());
-            user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-            user.setEnabled(true);
-            user.setEmailVerified(false);
-
-            // 3. Получение или создание роли USER
-            Role userRole = roleRepository.findByName("ROLE_USER")
-                    .orElseGet(() -> {
-                        Role newRole = new Role("ROLE_USER");
-                        return roleRepository.save(newRole);
-                    });
-
-            // 4. Назначение роли
-            user.getRoles().add(userRole);
-
-            // 5. Сохранение с явным flush
-            User savedUser = userRepository.saveAndFlush(user);
-
-            logger.info("Пользователь {} успешно зарегистрирован", registrationDto.getUsername());
-        } catch (Exception e) {
-            logger.error("Ошибка при регистрации пользователя: {}", registrationDto.getUsername(), e);
-        }
-    }
-}*/
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
